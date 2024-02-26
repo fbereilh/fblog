@@ -2,14 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.549">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Harlow Malloc">
-<meta name="dcterms.date" content="2024-02-05">
+<meta name="author" content="Felipe Bereilh">
+<meta name="dcterms.date" content="2024-02-26">
+<meta name="description" content="Dive deep into the Weight of Evidence (WoE) transformation. Concept, its importance, and practical applications, providing a step-by-step approach to implementing WoE in your data projects.">
 
-<title>fblog - Post With Code</title>
+<title>fblog - Weight of evidence deep dive</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,10 +23,44 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -68,6 +103,18 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-YJEV4P7Y2S"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-YJEV4P7Y2S', { 'anonymize_ip': true});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -115,11 +162,18 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Post With Code</h1>
-                                <div class="quarto-categories">
-                <div class="quarto-category">news</div>
-                <div class="quarto-category">code</div>
-                <div class="quarto-category">analysis</div>
+      <h1 class="title">Weight of evidence deep dive</h1>
+                  <div>
+        <div class="description">
+          Dive deep into the Weight of Evidence (WoE) transformation. Concept, its importance, and practical applications, providing a step-by-step approach to implementing WoE in your data projects.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Data Science</div>
+                <div class="quarto-category">Machine Learning</div>
+                <div class="quarto-category">Feature Engineering</div>
+                <div class="quarto-category">Risk Modeling</div>
+                <div class="quarto-category">Statistical Analysis</div>
               </div>
                   </div>
   </div>
@@ -130,14 +184,14 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Harlow Malloc </p>
+               <p>Felipe Bereilh </p>
             </div>
     </div>
       
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">February 5, 2024</p>
+        <p class="date">February 26, 2024</p>
       </div>
     </div>
     
@@ -156,9 +210,167 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>This is a post with executable code.</p>
+<section id="diving-into-the-weight-of-evidence-woe-transformation-a-light-hearted-expedition" class="level2">
+<h2 class="anchored" data-anchor-id="diving-into-the-weight-of-evidence-woe-transformation-a-light-hearted-expedition">Diving into the Weight of Evidence (WoE) Transformation: A Light-hearted Expedition</h2>
+<p>Welcome, fellow data wranglers, number crunchers, and curious minds to the whimsical world of feature engineering, where the Weight of Evidence (WoE) isn’t a medieval trial by ordeal, but an equally thrilling adventure in the realm of data science and machine learning.</p>
+<p>Ever wondered how to make your categorical variables strut down the runway of logistic regression models in continuous scale couture? Enter the stage, WoE transformation, the unsung hero that turns the chaos of categories into a harmonious melody of numbers. This statistical technique is like a magical wand that, with a flick, transforms your raw data into insightful, model-friendly information. It’s not just about making the numbers work; it’s about making them sing and dance to the tune of predictive modeling.</p>
+<p>But why, you ask, should we care about this seemingly arcane ritual? Because, dear reader, in the hands of a skilled practitioner (that’s you after reading this guide), WoE can unveil the secrets hidden within your data, making your models not just smarter but also storytellers of the unseen patterns in the world of finance, risk, and beyond. Imagine being the wizard whose spells (models) can predict the future, or at least the likelihood of someone defaulting on a loan.</p>
+<p>So buckle up, grab your wizard’s hat (or your data scientist’s cap, if you prefer), and join me on this exhilarating journey through the land of WoE. We’ll laugh, we’ll cry (hopefully from laughter), and we’ll learn how to transform our categorical variables into something that even your non-data-scientist friends might find mildly interesting at parties. Ready to turn your data into the life of the modeling party? Let’s dive in!</p>
+<div id="4687c589-fefb-40d0-a73b-4255269ba5d5" class="cell" data-tags="[]" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="dv">150</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.sin(x)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>plt.plot(x,y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-3-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="292f1ede-2004-41be-9a9c-5fbea7313268" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame([np.random.randn(<span class="dv">30</span>)<span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div>
+<div>
 
 
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">0</th>
+<th data-quarto-table-cell-role="th">1</th>
+<th data-quarto-table-cell-role="th">2</th>
+<th data-quarto-table-cell-role="th">3</th>
+<th data-quarto-table-cell-role="th">4</th>
+<th data-quarto-table-cell-role="th">5</th>
+<th data-quarto-table-cell-role="th">6</th>
+<th data-quarto-table-cell-role="th">7</th>
+<th data-quarto-table-cell-role="th">8</th>
+<th data-quarto-table-cell-role="th">9</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">20</th>
+<th data-quarto-table-cell-role="th">21</th>
+<th data-quarto-table-cell-role="th">22</th>
+<th data-quarto-table-cell-role="th">23</th>
+<th data-quarto-table-cell-role="th">24</th>
+<th data-quarto-table-cell-role="th">25</th>
+<th data-quarto-table-cell-role="th">26</th>
+<th data-quarto-table-cell-role="th">27</th>
+<th data-quarto-table-cell-role="th">28</th>
+<th data-quarto-table-cell-role="th">29</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0.406981</td>
+<td>-0.771861</td>
+<td>0.346655</td>
+<td>1.854994</td>
+<td>0.554467</td>
+<td>1.095002</td>
+<td>0.261151</td>
+<td>0.878623</td>
+<td>-0.238031</td>
+<td>1.164824</td>
+<td>...</td>
+<td>0.914089</td>
+<td>-1.892482</td>
+<td>0.748498</td>
+<td>0.052570</td>
+<td>0.213783</td>
+<td>-0.652685</td>
+<td>0.572153</td>
+<td>-1.614777</td>
+<td>-0.788671</td>
+<td>0.028114</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0.724105</td>
+<td>0.251463</td>
+<td>0.013936</td>
+<td>0.047881</td>
+<td>1.179642</td>
+<td>0.439079</td>
+<td>1.521430</td>
+<td>1.340585</td>
+<td>-0.199860</td>
+<td>-0.766495</td>
+<td>...</td>
+<td>-1.349073</td>
+<td>1.872242</td>
+<td>0.354088</td>
+<td>0.413441</td>
+<td>1.273878</td>
+<td>1.528837</td>
+<td>0.491234</td>
+<td>-0.741590</td>
+<td>-1.706747</td>
+<td>0.290206</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>0.527707</td>
+<td>0.415054</td>
+<td>0.658073</td>
+<td>0.610725</td>
+<td>0.360359</td>
+<td>-0.709093</td>
+<td>-0.842654</td>
+<td>0.027207</td>
+<td>-1.639340</td>
+<td>-0.450066</td>
+<td>...</td>
+<td>0.008549</td>
+<td>-1.095318</td>
+<td>0.503521</td>
+<td>0.062693</td>
+<td>-0.844304</td>
+<td>1.442239</td>
+<td>0.068086</td>
+<td>0.366560</td>
+<td>1.792707</td>
+<td>0.786167</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>1.031244</td>
+<td>-3.176727</td>
+<td>1.557699</td>
+<td>-0.585789</td>
+<td>-1.662885</td>
+<td>0.560411</td>
+<td>0.397402</td>
+<td>0.182252</td>
+<td>0.313122</td>
+<td>-0.182105</td>
+<td>...</td>
+<td>0.173442</td>
+<td>-0.758911</td>
+<td>1.936924</td>
+<td>-0.043735</td>
+<td>0.307891</td>
+<td>0.538234</td>
+<td>-0.254141</td>
+<td>-0.842194</td>
+<td>-1.200074</td>
+<td>0.957131</td>
+</tr>
+</tbody>
+</table>
+
+<p>4 rows × 30 columns</p>
+</div>
+</div>
+</div>
+</div>
+<p>https://www.analyticsvidhya.com/blog/2021/06/understand-weight-of-evidence-and-information-value/ https://www.listendata.com/2015/03/weight-of-evidence-woe-and-information.html https://www.statisticshowto.com/log-odds/</p>
+
+
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
