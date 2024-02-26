@@ -4,6 +4,7 @@ project:
 
 website:
   title: "fblog"
+  cookie-consent: true
   google-analytics: "G-YJEV4P7Y2S"
   navbar:
     right:
