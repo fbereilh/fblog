@@ -2,3 +2,6 @@
 /_proc
 /_site
 
+
+/.quarto/
+/.ipynb_checkpoints/

@@ -68,5 +68,40 @@
     "title": "Weight of evidence deep dive",
     "section": "",
     "text": "Welcome, fellow data wranglers, number crunchers, and curious minds to the whimsical world of feature engineering, where the Weight of Evidence (WoE) isn’t a medieval trial by ordeal, but an equally thrilling adventure in the realm of data science and machine learning.\nEver wondered how to make your categorical variables strut down the runway of logistic regression models in continuous scale couture? Enter the stage, WoE transformation, the unsung hero that turns the chaos of categories into a harmonious melody of numbers. This statistical technique is like a magical wand that, with a flick, transforms your raw data into insightful, model-friendly information. It’s not just about making the numbers work; it’s about making them sing and dance to the tune of predictive modeling.\nBut why, you ask, should we care about this seemingly arcane ritual? Because, dear reader, in the hands of a skilled practitioner (that’s you after reading this guide), WoE can unveil the secrets hidden within your data, making your models not just smarter but also storytellers of the unseen patterns in the world of finance, risk, and beyond. Imagine being the wizard whose spells (models) can predict the future, or at least the likelihood of someone defaulting on a loan.\nSo buckle up, grab your wizard’s hat (or your data scientist’s cap, if you prefer), and join me on this exhilarating journey through the land of WoE. We’ll laugh, we’ll cry (hopefully from laughter), and we’ll learn how to transform our categorical variables into something that even your non-data-scientist friends might find mildly interesting at parties. Ready to turn your data into the life of the modeling party? Let’s dive in!\n\nx = np.arange(150)\ny = np.sin(x)\nplt.plot(x,y)\n\n\n\n\n\n\n\n\n\npd.DataFrame([np.random.randn(30)for i in range(4)])\n\n\n\n\n\n\n\n\n\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n...\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n\n\n\n\n0\n0.406981\n-0.771861\n0.346655\n1.854994\n0.554467\n1.095002\n0.261151\n0.878623\n-0.238031\n1.164824\n...\n0.914089\n-1.892482\n0.748498\n0.052570\n0.213783\n-0.652685\n0.572153\n-1.614777\n-0.788671\n0.028114\n\n\n1\n0.724105\n0.251463\n0.013936\n0.047881\n1.179642\n0.439079\n1.521430\n1.340585\n-0.199860\n-0.766495\n...\n-1.349073\n1.872242\n0.354088\n0.413441\n1.273878\n1.528837\n0.491234\n-0.741590\n-1.706747\n0.290206\n\n\n2\n0.527707\n0.415054\n0.658073\n0.610725\n0.360359\n-0.709093\n-0.842654\n0.027207\n-1.639340\n-0.450066\n...\n0.008549\n-1.095318\n0.503521\n0.062693\n-0.844304\n1.442239\n0.068086\n0.366560\n1.792707\n0.786167\n\n\n3\n1.031244\n-3.176727\n1.557699\n-0.585789\n-1.662885\n0.560411\n0.397402\n0.182252\n0.313122\n-0.182105\n...\n0.173442\n-0.758911\n1.936924\n-0.043735\n0.307891\n0.538234\n-0.254141\n-0.842194\n-1.200074\n0.957131\n\n\n\n\n4 rows × 30 columns\n\n\n\n\nhttps://www.analyticsvidhya.com/blog/2021/06/understand-weight-of-evidence-and-information-value/ https://www.listendata.com/2015/03/weight-of-evidence-woe-and-information.html https://www.statisticshowto.com/log-odds/"
+  },
+  {
+    "objectID": "posts/2024-02-26-woe/index.html#introduction-to-weight-of-evidence-woe",
+    "href": "posts/2024-02-26-woe/index.html#introduction-to-weight-of-evidence-woe",
+    "title": "Weight of evidence deep dive",
+    "section": "Introduction to Weight of Evidence (WoE)",
+    "text": "Introduction to Weight of Evidence (WoE)"
+  },
+  {
+    "objectID": "posts/2024-02-26-woe/index.html#understanding-odds",
+    "href": "posts/2024-02-26-woe/index.html#understanding-odds",
+    "title": "Weight of evidence deep dive",
+    "section": "Understanding Odds",
+    "text": "Understanding Odds\nLong before people started using fancy math to understand chances, they were betting on outcomes. They used something called “odds” to figure out how risky a bet was compared to what they could win. This idea isn’t new; it’s been around since the 1500s. Odds help us see how likely something is to happen by comparing the good outcomes to the not-so-good ones.\nWhat Are Odds?\nOdds tell us about chances in a different way than just saying something is “likely” or “unlikely.” If the odds are 1 to 5, it means if we bet six times, we expect to win once and lose five times.\nFrom Chances to Odds Let’s make it even simpler. Imagine you have a bag with some red and blue marbles. If you’re more likely to pull out a red marble, the odds favor red. We can turn this “feeling” of more or less likely into numbers.\nIf the chance of pulling out a red marble is 1 out of 2 (or half the time), in odds language, we say the odds are “1 to 1.” That means the chances of getting a red marble or not getting a red marble are the same.\nHere’s how you can think about it:\nIf something is sure to happen, like the sun coming up, the odds are very high because the chance of it not happening is very low. If something is very unlikely, like finding a gold coin on the street, the odds are low because it’s not expected to happen often. Making It Real When people in the past bet on something, they looked at the odds to understand their chances. They wanted to make sure that if they took a big risk, it should pay off big. Today, we use odds in all kinds of ways, such as in medical research to communicate the risk of disease, or in finance to evaluate the risk of investments."
+  },
+  {
+    "objectID": "posts/2024-02-26-woe/index.html#log-odds",
+    "href": "posts/2024-02-26-woe/index.html#log-odds",
+    "title": "Weight of evidence deep dive",
+    "section": "Log odds",
+    "text": "Log odds"
+  },
+  {
+    "objectID": "posts/2024-02-26-woe/index.html#woe-as-a-log-odds",
+    "href": "posts/2024-02-26-woe/index.html#woe-as-a-log-odds",
+    "title": "Weight of evidence deep dive",
+    "section": "Woe as a log odds",
+    "text": "Woe as a log odds"
+  },
+  {
+    "objectID": "posts/2024-02-26-woe/index.html#why-it-works-in-linear-regression",
+    "href": "posts/2024-02-26-woe/index.html#why-it-works-in-linear-regression",
+    "title": "Weight of evidence deep dive",
+    "section": "Why it works in Linear regression",
+    "text": "Why it works in Linear regression\nWoE if specially usefull in categorical variables. When I studied statistiscs, the book used the one hot encoding fot categorigal ariables. The benefit of that approach"
   }
 ]
